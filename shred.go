@@ -50,8 +50,16 @@ func Overwrite(path string) error {
 		if sizeleft < 4096 {
 			buffer = make([]byte, sizeleft)
 		}
-		rand.Read(buffer)
-		wr.Write(buffer)
+		_, err = rand.Read(buffer)
+		if err != nil {
+			return err
+		}
+
+		// error handling?
+		_, err = wr.Write(buffer)
+		if err != nil {
+			return err
+		}
 	}
 
 	wr.Flush()
