@@ -13,14 +13,14 @@ import (
 )
 
 func TestShredDir(t *testing.T) {
-	err := Shred(".")
+	err := shred.Shred(".")
 	if err == nil {
 		t.Errorf("Expected error trying to shred a directory, but it passed.")
 	}
 }
 
 func TestShredNothing(t *testing.T) {
-	err := Shred("")
+	err := shred.Shred("")
 	if err == nil {
 		t.Errorf("Expected error trying to shred nothing, but it passed.")
 	}
@@ -37,7 +37,7 @@ func TestShredRegularFile(t *testing.T) {
 	os.Truncate(file.Name(), 6000)
 
 	// shred test
-	err = Shred(file.Name())
+	err = shred.Shred(file.Name())
 	if err != nil {
 		t.Errorf("Expected no error shredding a temporary file.")
 		os.Remove(file.Name())
@@ -61,7 +61,7 @@ func TestOverwriteRegularFile(t *testing.T) {
 	}
 
 	// overwrite
-	err = Overwrite(file.Name())
+	err = shred.Overwrite(file.Name())
 	if err != nil {
 		t.Errorf("Expected no error shredding a temporary file.")
 	}
