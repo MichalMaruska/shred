@@ -12,6 +12,7 @@ import (
 	"os"
 )
 
+// public for testing:
 func Overwrite(path string) error {
 	var BLOCKSIZE int64 = 4096
 	// variable declaration
