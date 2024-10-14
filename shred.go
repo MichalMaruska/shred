@@ -13,6 +13,7 @@ import (
 )
 
 func Overwrite(path string) error {
+	var BLOCKSIZE int64 = 4096
 	// variable declaration
 	var err error
 	var lstat fs.FileInfo
@@ -39,16 +40,17 @@ func Overwrite(path string) error {
 	// use buffered io for performance
 	wr = bufio.NewWriter(fd)
 
-	randbuff := make([]byte, 4096)
+	buffer := make([]byte, BLOCKSIZE)
 
-	// write random data in blocks of 4K when possible
-	for sizeleft = lstat.Size(); sizeleft > 0; sizeleft -= 4096 {
+	// write random data in blocks
+	// lseek(0)
+	for sizeleft = lstat.Size(); sizeleft > 0; sizeleft -= BLOCKSIZE {
+		// avoid generating useless random data, so shorten:
 		if sizeleft < 4096 {
-			// last block smaller than 4K sometimes
-			randbuff = make([]byte, sizeleft)
+			buffer = make([]byte, sizeleft)
 		}
-		rand.Read(randbuff)
-		wr.Write(randbuff)
+		rand.Read(buffer)
+		wr.Write(buffer)
 	}
 
 	wr.Flush()
