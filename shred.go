@@ -52,6 +52,8 @@ func Overwrite(path string) error {
 
 	// flush & close & return
 	wr.Flush()
+
+	fd.Sync()
 	fd.Close()
 	return nil
 }
