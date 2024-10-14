@@ -6,7 +6,6 @@ package shred_test
 
 import (
 	"bytes"
-	"io/ioutil"
 	"os"
 	"shred"
 	"testing"
@@ -28,56 +27,57 @@ func TestShredNothing(t *testing.T) {
 
 func TestShredRegularFile(t *testing.T) {
 	// create temporary file...
-	file, err := ioutil.TempFile(".", "tmp_")
+	file, err := os.CreateTemp(".", "tmp_")
 	if err != nil {
 		t.Logf("Error creating temp file for testing.")
 		t.FailNow()
 	}
+	defer os.Remove(file.Name())
+
 	// ...of size 6000
 	os.Truncate(file.Name(), 6000)
 
 	// shred test
 	err = shred.Shred(file.Name())
 	if err != nil {
-		t.Errorf("Expected no error shredding a temporary file.")
 		os.Remove(file.Name())
+		t.Fatalf("Expected no error shredding a temporary file.")
 	}
 
 	// verify
 	lstat, err := os.Lstat(file.Name())
 	if (lstat != nil) {
 		t.Errorf("File not removed after Shred.")
-
 	}
 }
 
 func TestOverwriteRegularFile(t *testing.T) {
 	// create temporary file...
-	file, err := ioutil.TempFile(".", "tmp_")
+	file, err := os.CreateTemp(".", "tmp_")
 	if err != nil {
 		t.Logf("Error creating temp file for testing.")
 		t.FailNow()
 	}
+	defer os.Remove(file.Name())
+
 	// ...of size 6000
 	os.Truncate(file.Name(), 6000)
 	// it is all zeros!
-	f1, err := ioutil.ReadFile(file.Name())
+	f1, err := os.ReadFile(file.Name())
 	if err != nil {
 		t.Logf("Error reading file before randomization.")
-		os.Remove(file.Name())
 		t.FailNow()
 	}
 
 	// overwrite
 	err = shred.Overwrite(file.Name())
 	if err != nil {
-		t.Errorf("Expected no error shredding a temporary file.")
+		t.Fatalf("Expected no error shredding a temporary file.")
 	}
 
-	f2, err := ioutil.ReadFile(file.Name())
+	f2, err := os.ReadFile(file.Name())
 	if err != nil {
 		t.Logf("Error reading file before randomization.")
-		os.Remove(file.Name())
 		t.FailNow()
 	}
 
