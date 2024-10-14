@@ -1,3 +1,3 @@
-module github.com/pabloandresm/shred
+module shred
 
-go 1.18
+go 1.23.2

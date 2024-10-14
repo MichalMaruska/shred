@@ -8,9 +8,8 @@ import (
 	"bytes"
 	"io/ioutil"
 	"os"
+	"shred"
 	"testing"
-
-	"github.com/pabloandresm/shred"
 )
 
 func TestShredDir(t *testing.T) {
