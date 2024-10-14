@@ -42,6 +42,13 @@ func TestShredRegularFile(t *testing.T) {
 		t.Errorf("Expected no error shredding a temporary file.")
 		os.Remove(file.Name())
 	}
+
+	// verify
+	lstat, err := os.Lstat(file.Name())
+	if (lstat != nil) {
+		t.Errorf("File not removed after Shred.")
+
+	}
 }
 
 func TestOverwriteRegularFile(t *testing.T) {
