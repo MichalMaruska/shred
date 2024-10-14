@@ -34,6 +34,7 @@ func Overwrite(path string) error {
 	if err != nil {
 		return err
 	}
+	defer fd.Close()
 
 	// use buffered io for performance
 	wr = bufio.NewWriter(fd)
@@ -50,11 +51,8 @@ func Overwrite(path string) error {
 		wr.Write(randbuff)
 	}
 
-	// flush & close & return
 	wr.Flush()
-
 	fd.Sync()
-	fd.Close()
 	return nil
 }
 
