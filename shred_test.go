@@ -60,6 +60,7 @@ func TestOverwriteRegularFile(t *testing.T) {
 	}
 	// ...of size 6000
 	os.Truncate(file.Name(), 6000)
+	// it is all zeros!
 	f1, err := ioutil.ReadFile(file.Name())
 	if err != nil {
 		t.Logf("Error reading file before randomization.")
@@ -82,6 +83,7 @@ func TestOverwriteRegularFile(t *testing.T) {
 
 	// test file bytes before and after randomization
 	if bytes.Equal(f1, f2) {
+		// unless the "random" data happens to be all zeros :)
 		t.Errorf("Expected different contect after randomization.")
 	}
 	os.Remove(file.Name())
