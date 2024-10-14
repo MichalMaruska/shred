@@ -34,8 +34,11 @@ The main use case of <code>Shred(path)</code> function is security, so if you de
 - The main drawback using this function is _**speed**_:
  - Since the file is overwritten 3 times, then its size will impact duration.
  - Since the file could be located on different media types (HDD, SSD, network shares, flash drives), then that technology will impact duration.
-- Another drawback could be _**free storage space**_. Some filesystems support the _**sparse**_ feature, which means that the blocks with no data (zeros) are not physically allocated. By using <code>Shred(path)</code> the entire size of the file will be allocated before being deleted, which can lead to no free space before completing the task.
-- If the function is used on a file located on a solid state device, then _**it will not succeed in hidding its content**_. This is because of the wear-level mechanisms that these type of devices use, which will translate and hide the mapping between a logical block to a physical one. So after shredding a file, if you read raw blocks from the device you could read content that was supposed to be shredded.
+
+ - On data-journaling filesystems the data might still be present on the underlying medium.
+
+ - Another drawback could be _**free storage space**_. Some filesystems support the _**sparse**_ feature, which means that the blocks with no data (zeros) are not physically allocated. By using <code>Shred(path)</code> the entire size of the file will be allocated before being deleted, which can lead to no free space before completing the task.
+ - If the function is used on a file located on a solid state device, then _**it will not succeed in hidding its content**_. This is because of the wear-level mechanisms that these type of devices use, which will translate and hide the mapping between a logical block to a physical one. So after shredding a file, if you read raw blocks from the device you could read content that was supposed to be shredded.
 
 # Usage
 ```
