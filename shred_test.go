@@ -1,6 +1,4 @@
-// Package shred provides an API for shredding a file beyond possible recovery
 //
-// Creator: Pablo Martikian (pablomartikian@hotmail.com)
 //
 package shred_test
 
