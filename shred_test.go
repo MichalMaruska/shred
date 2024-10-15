@@ -6,6 +6,7 @@ package shred_test
 
 import (
 	"bytes"
+	"io/fs"
 	"os"
 	"shred"
 	"testing"
@@ -32,6 +33,21 @@ func temporaryFile(t *testing.T) (*os.File, error) {
 		t.Logf("Error creating temp file for testing.\n\t%s", err.Error())
 	}
 	return file, err
+}
+
+
+func TestUnreadableFile(t *testing.T) {
+	file, err := temporaryFile(t)
+	if err != nil {
+		t.FailNow()
+	}
+	defer os.Remove(file.Name())
+	err = os.Chmod(file.Name(), fs.ModePerm & 0400)
+
+	err = shred.Shred(file.Name())
+	if err == nil {
+		t.Fatalf("Expected error on read-only file.")
+	}
 }
 
 
