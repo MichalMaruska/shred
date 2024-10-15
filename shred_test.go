@@ -11,14 +11,14 @@ import (
 	"testing"
 )
 
-func TestShredDir(t *testing.T) {
+func TestShredDirectory(t *testing.T) {
 	err := shred.Shred(".")
 	if err == nil {
 		t.Errorf("Expected error trying to shred a directory, but it passed.")
 	}
 }
 
-func TestShredNothing(t *testing.T) {
+func TestShredWrongFilename(t *testing.T) {
 	err := shred.Shred("")
 	if err == nil {
 		t.Errorf("Expected error trying to shred nothing, but it passed.")
