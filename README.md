@@ -25,7 +25,7 @@ pablo@machine:~/shred$ go test -v -cover
 --- PASS: TestOverwriteRegularFile (0.00s)
 PASS
 coverage: 93.8% of statements
-ok  	github.com/pabloandresm/shred	0.005s
+ok  	shred	0.005s
 ```
 
 # Use cases, pros and cons
@@ -45,7 +45,7 @@ The main use case of <code>Shred(path)</code> function is security, so if you de
 package main
 
 import (
-    "github.com/pabloandresm/shred"
+    "shred"
     "fmt"
     )
 
@@ -61,10 +61,7 @@ func main() {
 
 # Installation
 ```
-go get -u github.com/pabloandresm/shred
+go get -u {URL}/shred
 ```
 
 ---
-Pablo Martikian
-
-23 May 2022
