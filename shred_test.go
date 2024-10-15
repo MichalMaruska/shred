@@ -25,26 +25,52 @@ func TestShredWrongFilename(t *testing.T) {
 	}
 }
 
-func TestShredRegularFile(t *testing.T) {
-	// create temporary file...
+
+func temporaryFile(t *testing.T) (*os.File, error) {
 	file, err := os.CreateTemp(".", "tmp_")
 	if err != nil {
-		t.Logf("Error creating temp file for testing.")
+		t.Logf("Error creating temp file for testing.\n\t%s", err.Error())
+	}
+	return file, err
+}
+
+
+// write something?
+func generateContent(file *os.File, t *testing.T) error {
+	// os.Truncate(file.Name(), 6000)
+
+	fd, err := os.OpenFile(file.Name(), os.O_WRONLY, 0)
+	if err != nil {
+		t.Logf("Error opening temp file.")
+		return err
+	}
+	defer fd.Close()
+
+	_, err = fd.WriteString("Hello")
+
+	if err != nil {
+		t.Logf("Error opening temp file.")
+	}
+	return err
+}
+
+func TestShredCheckRemoval(t *testing.T) {
+	file, err := temporaryFile(t)
+	if err != nil {
 		t.FailNow()
 	}
 	defer os.Remove(file.Name())
 
-	// ...of size 6000
-	os.Truncate(file.Name(), 6000)
+	err = generateContent(file, t)
+	if err != nil {
+		t.FailNow()
+	}
 
-	// shred test
 	err = shred.Shred(file.Name())
 	if err != nil {
-		os.Remove(file.Name())
 		t.Fatalf("Expected no error shredding a temporary file.")
 	}
 
-	// verify
 	lstat, err := os.Lstat(file.Name())
 	if (lstat != nil) {
 		t.Errorf("File not removed after Shred.")
