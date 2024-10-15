@@ -93,17 +93,19 @@ func TestShredCheckRemoval(t *testing.T) {
 	}
 }
 
-func TestOverwriteRegularFile(t *testing.T) {
-	// create temporary file...
-	file, err := os.CreateTemp(".", "tmp_")
+
+func TestSingleOverwrite(t *testing.T) {
+	file, err := temporaryFile(t)
 	if err != nil {
-		t.Logf("Error creating temp file for testing.")
 		t.FailNow()
 	}
 	defer os.Remove(file.Name())
 
-	// ...of size 6000
-	os.Truncate(file.Name(), 6000)
+	err = generateContent(file, t)
+	if err != nil {
+		t.FailNow()
+	}
+
 	// it is all zeros!
 	f1, err := os.ReadFile(file.Name())
 	if err != nil {
@@ -128,5 +130,4 @@ func TestOverwriteRegularFile(t *testing.T) {
 		// unless the "random" data happens to be all zeros :)
 		t.Errorf("Expected different contect after randomization.")
 	}
-	os.Remove(file.Name())
 }
